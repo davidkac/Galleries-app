@@ -19,7 +19,7 @@ class AuthService extends HttpService{
     };
 
     getActiveUser = async () => {
-        const {data} = await this.client.get("/me");
+        const {data} = await this.client.get("/profile");
         return data;
     };
 
