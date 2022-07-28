@@ -1,33 +1,53 @@
 import HttpService from "./HttpService";
 
 class GalleryService extends HttpService{
-    getAll = async () => {
+    getGalleries = async (page = 0, term = "", userId ="") => {
 
-        const {data} = await this.client.get("galleries");
+        let endpoint = `/galleries/?page=${page}`;
+
+        if (term) {
+            endpoint += `&term=${term}`;
+        }
+
+        if (userId){
+            endpoint += `&userId=${userId}`;
+        }
+
+        const {data} = await this.client.get(endpoint);
+
         return data;
     }
 
-    get = async (id) => {
+    getGallery = async (id) => {
         const {data} = await this.client.get(`/galleries/${id}`);
         return data;
     }
 
-    create = async (galleryData) => {
+    createGallery = async (galleryData) => {
         const { data } = await this.client.post("/galleries", galleryData);
         return data;
     }
 
-    delete = async (gallery) => {
+    deleteGallery = async (gallery) => {
         const { data } = await this.client.delete(`/galleries/${gallery}`);
         return data;
     }
 
-    edit = async (galleryId, gallery) => {
+    editGallery = async (galleryId, gallery) => {
         const { data } = await this.client.put(`/galleries/${galleryId}`, gallery);
         return data;
     }
 
+    createComment = async (comment, galleryId) => {
+        const { data } = await this.client.post(`/galleries/${galleryId}/comments`, comment);
+        return data;
+    }
 
+    deleteComment = async (comment) => {
+        console.log(comment);
+        const { data } = await this.client.delete(`/comments/${comment}`);
+        return data;
+    }
 }
 
 const galleryService = new GalleryService();

@@ -1,57 +1,62 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
 import './App.css';
-import { selectActiveUser,selectIsAuthenticated} from './store/auth/selectors';
-import { useDispatch ,useSelector} from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getActiveUser } from "./store/auth/slice";
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Navbar from './components/Navbar';
-import Galleries from './pages/Galleries';
-import CreateGallery from "./pages/CreateGallery";
-import PrivateRoute from "./components/shared/PrivateRoute";
+import { selectIsAuthenticated, selectActiveUser } from "./store/auth/selectors";
+import Navbar from "./components/Navbar";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 import GuestRoute from "./components/shared/GuestRoute";
-
+import PrivateRoute from './components/shared/PrivateRoute';
+import Galleries from './pages/Galleries';
+import Gallery from './pages/Gallery';
+import CreateGallery from './pages/CreateGallery';
 
 function App() {
-
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const activeUser = useSelector(selectActiveUser);
 
-
-useEffect(() => {
-  if (isAuthenticated) {
-    dispatch(getActiveUser());
-  }
-}, 
-[dispatch, isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getActiveUser());
+    }
+  }, 
+  [dispatch, isAuthenticated]);
 
   return (
     <div className="App">
       <Router>
-      <Navbar/>
+        <Navbar/>
         <Switch>
           <GuestRoute exact path="/register">
             <Register/>
           </GuestRoute>
-          <GuestRoute exact path='/login'>
-            <Login />
+          <GuestRoute exact path="/login">
+            <Login/>
           </GuestRoute>
-          <GuestRoute exact path="/">
-           <Redirect to="/galleries" />
-          </GuestRoute>
+          <Route exact path="/"> 
+            <Redirect to="/galleries"/>
+          </Route>
           <Route exact path="/galleries">
-           <Galleries />
-           </Route>
+            <Galleries/>
+          </Route>
+          <PrivateRoute exact path="/galleries/profile">
+            <Galleries selfId={isAuthenticated ? (activeUser?.id) : null}/>
+          </PrivateRoute>
           <PrivateRoute exact path="/galleries/create">
-            <CreateGallery />
+            <CreateGallery/>
+          </PrivateRoute>
+          <Route exact path="/galleries/:id">
+            <Gallery/>
+          </Route>
+          <Route exact path="/authors/:id">
+            <Galleries/>
+          </Route>
+          <PrivateRoute exact path ="/edit-gallery/:id">
+            <CreateGallery/>
           </PrivateRoute>
         </Switch>
       </Router>

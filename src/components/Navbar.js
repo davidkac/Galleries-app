@@ -14,9 +14,9 @@ export default function Navbar(){
     }
 
     return (
-        <div>
+        <div >
             <nav>
-                <ul>
+                <ul style={{ listStyleType: "none", textAlign:"center"}}>
                 {isAuthenticated ? (
                     <h3>
                         User: {activeUser && activeUser.first_name} {activeUser && activeUser.last_name}  
