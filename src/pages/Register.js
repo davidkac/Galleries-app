@@ -31,7 +31,7 @@ export default function Register(){
     }
 
     return (
-        <div>
+        <div style={{backgroundColor:"#D0D0D0"}}>
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>
          

@@ -7,6 +7,7 @@ import useFormattedDate from '../hooks/useFormattedDate';
 import { selectIsAuthenticated, selectActiveUser } from "../store/auth/selectors";
 import { format } from 'date-fns';
 import { Carousel } from "react-bootstrap";
+import Button from 'react-bootstrap/Button';
 
 export default function Gallery(){
     const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export default function Gallery(){
         }
         dispatch(deleteComment(id));
         setTimeout(() => {
-            history.go(0);
+            history.go(0)
         }, 1500);
     }
 
@@ -52,7 +53,7 @@ export default function Gallery(){
         }
         dispatch(deleteGallery(id));
         setTimeout(() => {
-            history.push("/galleries/me");
+            history.push("/galleries/profile");
         }, 1500);
     }
 
@@ -60,7 +61,7 @@ export default function Gallery(){
         <div>
             <div
                 style={{
-                flex: 1,
+                flex:1,
                 display: "flex",
                 flexDirection: "column",
                 width: "100%",
@@ -69,26 +70,24 @@ export default function Gallery(){
                 border: "solid",
                 margin: "5px",
                 fontSize: "10px",
-                backgroundColor: "Gainsboro",
+                backgroundColor: "White",
                 boxSizing: "border-box",
                 }} 
             >
             {gallery ? (
                 <>
-                    <h1 style={{ padding: "10px" }}>
-                      {gallery?.title}
+                    <h1 style={{ padding: "5px" ,fontSize:"25px"}}>
+                     Tittle: {gallery?.title}
                     </h1>
-
-                    <h3 style={{ padding: "10px", color: "red" }}>
-                      By: <Link to={`/authors/${gallery?.user?.id}`} style={{color: "red" }}>{gallery?.user?.first_name} {gallery?.user?.last_name}</Link>
+                    <h3 style={{ padding: "5px", color: "black" }}>
+                      Author: <Link to={`/authors/${gallery?.user?.id}`} style={{color: "Black",textDecorationLine:"none"}}>{gallery?.user?.first_name} {gallery?.user?.last_name}</Link>
                     </h3>
-
                     {formattedDate === "unknown" ? (
                         <div style={{ padding: "10px" }}>
                         Unknown date
                       </div>
                       ) : (
-                          <div style={{ padding: "10px" }}>
+                          <div style={{ padding: "10px",fontSize:"15px" }}>
                           Created at: {formattedDate}
                         </div>
                       )}
@@ -115,12 +114,12 @@ export default function Gallery(){
                         )}
                     </div>
                     {activeUser && (activeUser.id === gallery.user_id) ? (
-                        <Link to={`/edit-gallery/${gallery.id}`}>Edit Gallery</Link>
+                        <Link to={`/edit-gallery/${gallery.id}`} style={{fontSize:"15px",}}>Edit Gallery</Link>
                     ) : (
                         <></>
                     )}
                     {activeUser && (activeUser.id === gallery.user_id) ? (
-                        <button onClick={handleDeleteGallery}>Delete gallery</button>
+                        <Button variant="danger" onClick={handleDeleteGallery}>Delete gallery</Button>
                     ) : (
                         <></>
                     )}
@@ -137,7 +136,7 @@ export default function Gallery(){
                 flexDirection: "column",
                 width: "100%",
                 justifyContent: "start",
-                alignItems: "center",
+                alignItems: "flex-star",
                 border: "solid",
                 margin: "5px"
                 }} 
@@ -146,18 +145,22 @@ export default function Gallery(){
             {gallery && gallery.comments ? (
                 <>
                     {gallery.comments.length ? (<h4>Comments</h4>) : (<h4>No Comments</h4>)}
-                        <ul style={{listStyleType: "none"}}>
+                        <ul style={{listStyleType: "none", }}>
                             {gallery.comments.map((comment) => (
                                 <li key={comment.id} id={`comment${comment.id}`}>
-                                    <div>{comment.user.first_name} {comment.user.last_name}</div>
-                                    <div>{format(new Date(comment.created_at), "dd-MM-yyyy HH:mm")}</div>
+                                    <div style={{ fontSize:"20px"}}>{comment.user.first_name} {comment.user.last_name}</div>                                    <div>{format(new Date(comment.created_at), "dd-MM-yyyy HH:mm")}</div>
                                     <p>{comment.content}</p>
+                                   
                                     {activeUser && (activeUser.id === comment.user.id) ? (
-                                        <button onClick={() => handleDeleteComment(comment.id)}>Delete Comment</button>
+                                        <Button  variant="danger" onClick={() => handleDeleteComment(comment.id)}>Delete Comment</Button>
                                     ) : (
+                                        
                                         <></>
+                                        
                                     )}
+                                     <hr></hr>
                                 </li>
+            
                             ))}
                         </ul>
                     </>
@@ -167,9 +170,9 @@ export default function Gallery(){
 
             {isAuthenticated && (
                 <form onSubmit={handleAddNewComment} style={{fontFamily: "sans-serif", fontSize: "12px"}}>
-                    <textarea style={{ backgroundColor: "lightpink" }} required rows="3" cols="40" onChange={handleContentChange} 
+                    <textarea style={{ backgroundColor: "white" }} required rows="3" cols="40" onChange={handleContentChange} 
                     value={newComment.content} placeholder="Hey... say something!" />
-                    <button>Submit!</button>
+                    <Button variant="primary" type="submit">Submit!</Button>
                 </form>
             )}
             </div>

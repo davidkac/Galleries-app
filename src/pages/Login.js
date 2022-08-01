@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../store/auth/slice";
 
+
 export default function Login(){
     const dispatch = useDispatch();
     const [credentials, setCredentials] = useState({
@@ -15,8 +16,8 @@ export default function Login(){
     }
 
     return (
-        <div>
-          <h2>Login</h2>
+        <div style={{backgroundColor:"#D0D0D0"}}>
+          <h2 >Login</h2>
           <form onSubmit={handleSubmit}>
             <div>
               <input required type="email" placeholder="Email" value={credentials.email}

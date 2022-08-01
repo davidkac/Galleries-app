@@ -41,8 +41,8 @@ export default function Galleries({selfId} = null) {
     }
 
     return (
-        <div>
-            <h3 style={{ padding: "15px", backgroundColor: 'PaleVioletRed'}}>
+        <div style={{backgroundColor:"#D0D0D0"}}>
+            <h3 style={{ padding: "15px", backgroundColor: 'grey'}}>
             {selfId && ("My ")} 
             {id && galleries.data.length ?
             (`${galleries?.data[0]?.user?.first_name}'s `) : 
@@ -53,7 +53,7 @@ export default function Galleries({selfId} = null) {
 
             {galleries?.data.length ? (
                 <div>
-                <ul>
+                <ul >
                     {galleries.data.map((gallery) => (
                         <GalleryRow key={gallery.id} gallery={gallery} />
                     ))}
