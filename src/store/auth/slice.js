@@ -13,6 +13,8 @@ const authSlice = createSlice({
     initialState: {
         token: localStorage.getItem("token"),
         activeUser: null,
+        loginError: false,
+        RegisterError:false,
     },
     reducers: {
         setActiveUser: (state, action) => {
@@ -21,10 +23,16 @@ const authSlice = createSlice({
         setToken: (state, action) => {
             state.token = action.payload;
         },
+        setLoginError(state, action) {
+            state.loginError = action.payload;
+          },
+          setRegistrationErrors(state, action) {
+            state.registrationErrors = action.payload;
+          },
         
         ...middlewareActions
     }
 });
 
-export const { login, logout, register, getActiveUser, setActiveUser, setToken} = authSlice.actions;
+export const { login, logout, register, getActiveUser, setActiveUser, setToken,setLoginError,setRegistrationErrors,} = authSlice.actions;
 export default authSlice.reducer;

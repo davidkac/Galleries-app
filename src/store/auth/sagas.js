@@ -1,26 +1,30 @@
 import { put, call, takeLatest } from "redux-saga/effects";
-import { login, logout, register, getActiveUser, setActiveUser, setToken } from "./slice";
+import { login, logout, register, getActiveUser, setActiveUser, setToken ,setLoginError,setRegistrationErrors,} from "./slice";
 import authService from "../../services/AuthService";
 
-function* registerHandler(action){
-    try{
-        const {user, token} = yield call(authService.register, action.payload);
-        yield put(setToken(token));
-        yield put(setActiveUser(user));
-    } catch (error){
-        alert("Invalid input data");
-    }
-}
-
-function* loginHandler(action){
+function* RegisterHandler(action) {
     try {
-        const {user, token} = yield call(authService.login, action.payload);
-        yield put(setToken(token));
-        yield put(setActiveUser(user));
-    } catch (error) {
-        alert("Password must contain at least one number and at least 8 or more characters!");
+      const { user, token } = yield call(authService.register, action.payload);
+      yield put(setToken(token));
+      yield put(setActiveUser(user));
+    } catch (e) {
+      if (e.response.status == 422) {
+        yield put(setRegistrationErrors(e.response.data.errors));
+      }
     }
-}
+  }
+
+function* LoginHandler(action) {
+    try {
+      const { user, token } = yield call(authService.login, action.payload);
+      yield put(setToken(token));
+      yield put(setActiveUser(user));
+    } catch (e) {
+      if (e.response.status == 401) {
+        yield put(setLoginError(true));
+      }
+    }
+  }
 
 function* logoutHandler(){
     try {
@@ -46,11 +50,11 @@ function* ActiveUserHandler(){
 }
 
 export function* watchRegister(){
-    yield takeLatest(register.type, registerHandler);
+    yield takeLatest(register.type, RegisterHandler);
 }
 
 export function* watchLogin(){
-    yield takeLatest(login.type, loginHandler);
+    yield takeLatest(login.type, LoginHandler);
 }
 
 export function* watchLogout(){

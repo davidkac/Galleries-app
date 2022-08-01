@@ -1,9 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector} from "react-redux";
 import { useState } from "react";
 import {register} from "../store/auth/slice";
 import { useHistory } from "react-router-dom";
+import { selectRegistrationErrors } from "../store/auth/selectors";
 
 export default function Register(){
+
+    const RegisterError = useSelector(selectRegistrationErrors);
     const history = useHistory();
     const dispatch = useDispatch();
     const [userData, setUserData] = useState({
@@ -25,7 +28,7 @@ export default function Register(){
 
         dispatch(register(userData));
 
-        history.push('/login');
+       
 
         
     }
@@ -42,15 +45,24 @@ export default function Register(){
               <input required placeholder="last name" value={userData.last_name}
                 onChange={({ target }) => setUserData({ ...userData, last_name: target.value })}/>
                     <br></br>
+                    
               <input required type="email" placeholder="Email" value={userData.email}
                 onChange={({ target }) => setUserData({ ...userData, email: target.value })}/>
                     <br></br>
+                    {RegisterError && (
+               <span style={{ color: "red" }}>Invalid password</span>
+        )} 
               <input required type="password" placeholder="Password" value={userData.password}
                 onChange={({ target }) => setUserData({ ...userData, password: target.value })}/>
-                    <br></br>
+                    <br></br> {RegisterError && (
+               <span style={{ color: "red" }}>Invalid password</span>
+        )}
+        
+                 
               <input required type="password" placeholder="Confirm password" value={userData.password_confirmation}
                 onChange={({ target }) => setUserData({ ...userData, password_confirmation: target.value })}/>
                     <br></br>
+                    
               <label>
                 Please read and accept Terms and Conditions before registering!
               </label>
@@ -58,6 +70,9 @@ export default function Register(){
               <input required type="checkbox" name="terms" value={true}
                 onChange={({ target }) => setUserData({ ...userData, terms: target.checked })}/>
                     <br></br>
+                    {RegisterError && (
+               <span style={{ color: "red" }}>Invalid credentials</span>
+        )}
 
             <button>Register</button>
           </form>

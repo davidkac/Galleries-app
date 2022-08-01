@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { login } from "../store/auth/slice";
+import { selectLoginError } from "../store/auth/selectors";
 
 
 export default function Login(){
     const dispatch = useDispatch();
+    const loginError = useSelector(selectLoginError);
+
     const [credentials, setCredentials] = useState({
         email: "",
         password: ""
@@ -29,6 +32,9 @@ export default function Login(){
                 onChange={({ target }) => setCredentials({ ...credentials, password: target.value })}/>
             </div>
             <br/>
+            {loginError && (
+          <span style={{ color: "red" }}>Invalid credentials</span>
+        )}
             <button>Login</button>
           </form>
         </div>
